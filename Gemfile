@@ -70,3 +70,6 @@ end
 
 gem 'thor', '0.19.1'
 gem 'bootstrap-sass'
+gem 'figaro'
+
+ruby "2.4.1"
