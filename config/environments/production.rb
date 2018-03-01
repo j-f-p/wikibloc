@@ -89,5 +89,5 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
   
-  config.action_mailer.default_url_options = { host: ENV['PRO_HOST'] }
+  config.action_mailer.default_url_options = { host: Figaro.env.APP_HOST }
 end
