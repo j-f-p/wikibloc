@@ -15,3 +15,10 @@
  */
  @import "bootstrap-sprockets";
  @import "bootstrap";
+ 
+ .nav > li > p {
+  margin: 0;
+  padding: 10px 15px; // matches .nav > li > a
+  border: 1px solid transparent; // matches .nav-tabs > li > a
+  // .nav > li has position: relative; display: block;
+}
