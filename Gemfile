@@ -64,6 +64,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.0'
   gem 'rails-controller-testing'
   gem 'factory_bot_rails'
+  gem 'shoulda'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
