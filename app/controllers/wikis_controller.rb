@@ -1,4 +1,6 @@
 class WikisController < ApplicationController
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+  
   def index
     @wikis = Wiki.all
   end
@@ -35,6 +37,8 @@ class WikisController < ApplicationController
     @wiki = Wiki.find(params[:id])
     @wiki.title = params[:wiki][:title]
     @wiki.body = params[:wiki][:body]
+    
+    authorize @wiki
 
     if @wiki.save
       flash[:notice] = "Wiki was updated."
@@ -48,6 +52,8 @@ class WikisController < ApplicationController
 
   def destroy
     @wiki = Wiki.find(params[:id])
+    
+    authorize @wiki
 
     if @wiki.destroy
       flash[:notice] = "\"#{@wiki.title}\" was deleted successfully."
@@ -56,5 +62,14 @@ class WikisController < ApplicationController
       flash.now[:alert] = "There was an error deleting the wiki."
       render :show
     end
+  end
+  
+  private
+
+  def user_not_authorized(exception)
+    policy_name = exception.policy.class.to_s.underscore
+    flash[:alert] = t "#{policy_name}.#{exception.query}", scope: "pundit",
+      default: :default
+    redirect_to(request.referrer || wikis_path)
   end
 end

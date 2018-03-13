@@ -74,5 +74,6 @@ gem 'thor', '0.19.1'
 gem 'bootstrap-sass'
 gem 'figaro'
 gem 'devise'
+gem 'pundit'
 
 ruby "2.4.1"

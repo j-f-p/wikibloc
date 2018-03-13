@@ -28,10 +28,12 @@
           </li>
           <li class="pull-right">
             <p>
-              Signed in as <strong><%= current_user.email %></strong>
+              Signed in as <%= content_tag( :strong, current_user.email,
+                title: "#{current_user.role} member" ) %>
             </p>
           </li>
         <% else %>
+          <li><p><strong>Blocipedia</strong></p></li>
           <li class="pull-right">
             <%= link_to "Sign Up", new_user_registration_path,
               class: 'navbar-link' %>
