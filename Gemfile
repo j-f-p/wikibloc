@@ -75,5 +75,6 @@ gem 'bootstrap-sass'
 gem 'figaro'
 gem 'devise'
 gem 'pundit'
+gem 'faker'
 
 ruby "2.4.1"
