@@ -13,10 +13,10 @@
  *= require_tree .
  *= require_self
  */
- @import "bootstrap-sprockets";
- @import "bootstrap";
+@import "bootstrap-sprockets";
+@import "bootstrap";
  
- .nav > li > p {
+.nav > li > p {
   margin: 0;
   padding: 10px 15px; // matches .nav > li > a
   border: 1px solid transparent; // matches .nav-tabs > li > a
