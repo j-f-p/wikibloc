@@ -16,11 +16,10 @@
     <br>
     <%= content_tag :p, "Member Status",
       style: "font-weight: bold; margin-bottom: 5px;" %>
-    <% default_role = @user.standard? %>
-    <%= f.radio_button :role, :standard, checked: default_role %>
+    <%= f.radio_button :role, :standard, checked: @user.standard? %>
     <%= f.label :role, :standard, value: :standard, class: 'role-radio-label' %>
     <br>
-    <%= f.radio_button :role, :premium, checked: !default_role %>
+    <%= f.radio_button :role, :premium, checked: @user.premium? %>
     <%= f.label :role, :premium, value: :premium, class: 'role-radio-label' %>
   </div>
   

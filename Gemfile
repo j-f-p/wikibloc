@@ -76,5 +76,6 @@ gem 'figaro'
 gem 'devise'
 gem 'pundit'
 gem 'faker'
+gem 'stripe'
 
 ruby "2.4.1"
