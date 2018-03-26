@@ -8,6 +8,7 @@ class User < ApplicationRecord
   enum role: [:standard, :premium, :admin]
   after_initialize :init
   
+  attr_accessor :stripe_token
   def init
     self.role ||= :standard
   end
