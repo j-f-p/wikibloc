@@ -7,11 +7,18 @@
   </div>
 </div>
 <% @wikis.each do |wiki| %>
+  <% if wiki_viewable(wiki) %>
   <div class="media">
     <div class="media-body">
       <h4 class="media-heading">
-        <p><%= link_to wiki.title, wiki %></p>
+        <p>
+          <%= link_to wiki.title, wiki %>
+          <% if wiki.private? %>
+            &nbsp;(private)
+          <% end %>
+        </p>
       </h4>
     </div>
   </div>
+  <% end %>
 <% end %>
