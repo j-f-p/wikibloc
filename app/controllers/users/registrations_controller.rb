@@ -33,6 +33,16 @@ class Users::RegistrationsController < Devise::RegistrationsController
       prev_unconfirmed_email = resource.unconfirmed_email 
     end
     
+    if(params[:requested_role]=="standard")
+      if Wiki.where(
+        'user_id = ? AND private = ?', current_user.id, true).count > 0
+        Wiki.where('user_id = ? AND private = ?', current_user.id, true)
+            .find_each do |wiki|
+              wiki.update(private: false)
+        end
+      end
+    end
+    
     resource_updated = update_resource(resource, account_update_params)
     yield resource if block_given?
     
