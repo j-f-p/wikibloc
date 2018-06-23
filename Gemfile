@@ -77,5 +77,6 @@ gem 'devise'
 gem 'pundit'
 gem 'faker'
 gem 'stripe'
+gem 'redcarpet'
 
 ruby "2.4.1"
