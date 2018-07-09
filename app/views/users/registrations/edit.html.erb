@@ -16,14 +16,18 @@
     <br>
     <%= content_tag :p, "Member Status ",
       style: "font-weight: bold; margin-bottom: 5px;" %>
-    <%= radio_button_tag "requested_role", "standard", @user.standard? %>
-    <%= label_tag "requested_role", "standard ", value: "standard",
-      class: 'role-radio-label' %>
-    (<span style="color: green"><small>FREE</small></span>)
-    <br>
-    <%= radio_button_tag "requested_role", "premium", @user.premium? %>
-    <%= label_tag "requested_role", "premium", value: "premium",
-      class: 'role-radio-label' %>
+    <% if @user.admin? %>
+      <p>Admin</p>
+    <% else %>
+      <%= radio_button_tag "requested_role", "standard", @user.standard? %>
+      <%= label_tag "requested_role", "standard ", value: "standard",
+        class: 'role-radio-label' %>
+      (<span style="color: green"><small>FREE</small></span>)
+      <br>
+      <%= radio_button_tag "requested_role", "premium", @user.premium? %>
+      <%= label_tag "requested_role", "premium", value: "premium",
+        class: 'role-radio-label' %>
+    <% end %>
   </div>
   
   <div class="field">
@@ -52,9 +56,11 @@
 <% end %>
 
 <h2>
+  <% unless @user.admin? %>
   <%= link_to "Cancel my account", registration_path(resource_name),
     data: { confirm: "Are you sure?" }, method: :delete,
     class: 'cancel-acct-link' %>
+  <% end %>
 </h2>
 <h2>
   <%= link_to "Abort Edit", root_path, class: 'abort-edit-link' %>
