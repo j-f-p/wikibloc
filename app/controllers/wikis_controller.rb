@@ -18,7 +18,7 @@ class WikisController < ApplicationController
     @wiki.title = params[:wiki][:title]
     @wiki.body = params[:wiki][:body]
     @wiki.private = params[:wiki][:private]
-    @wiki.private = false if @wiki.private==nil
+    @wiki.private = false if @wiki.private==nil # to show empty checkbox
     @wiki.user = current_user
 
     if @wiki.save
@@ -38,9 +38,11 @@ class WikisController < ApplicationController
 
   def update
     @wiki = Wiki.find(params[:id])
+    db_wiki_private = @wiki.private # the value in the database
     @wiki.title = params[:wiki][:title]
     @wiki.body = params[:wiki][:body]
     @wiki.private = params[:wiki][:private]
+    @wiki.private = false if @wiki.private==nil # to appease validator
     
     authorize @wiki
 
@@ -50,6 +52,14 @@ class WikisController < ApplicationController
     else
       flash.now[:alert] = ("There was an error saving the wiki." +
         "Please try again.")
+        
+      @wiki.private=true if db_wiki_private==true
+      # when a private wiki is desired to be made public, require uncheck of
+      # private checkbox for each submission attempt following an error
+      
+      # @wiki.private=nil if db_wiki_private==false
+      # assigned nil by form when checkbox not rendered
+      #  either this logic or a hidden field, though viewable in page source
       render :edit
     end
   end
