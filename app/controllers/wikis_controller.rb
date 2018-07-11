@@ -27,6 +27,7 @@ class WikisController < ApplicationController
     else
       flash.now[:alert] = ("There was an error saving the wiki." +
         "Please try again.")
+      @wiki.private = nil # so that wiki new form can show private checkbox
       render :new
     end
   end

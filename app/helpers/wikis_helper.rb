@@ -1,5 +1,8 @@
 module WikisHelper
   def authorized_for_private_wikis?(wiki)
+    # wiki.private==nil prior to render of wiki new form
+    # Excluding wiki.private==false prevents all public wikis from becoming
+    # private.
     (wiki.private==nil || wiki.private?) &&
       (current_user.admin? || current_user.premium?)
   end
