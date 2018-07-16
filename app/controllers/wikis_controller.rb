@@ -14,12 +14,8 @@ class WikisController < ApplicationController
   end
 
   def create
-    @wiki = Wiki.new
-    @wiki.title = params[:wiki][:title]
-    @wiki.body = params[:wiki][:body]
-    @wiki.private = params[:wiki][:private]
+    @wiki = current_user.wikis.build(wiki_params)
     @wiki.private = false if @wiki.private==nil # to show empty checkbox
-    @wiki.user = current_user
 
     if @wiki.save
       flash[:notice] = "Wiki was saved."
@@ -39,9 +35,8 @@ class WikisController < ApplicationController
   def update
     @wiki = Wiki.find(params[:id])
     db_wiki_private = @wiki.private # the value in the database
-    @wiki.title = params[:wiki][:title]
-    @wiki.body = params[:wiki][:body]
-    @wiki.private = params[:wiki][:private]
+    
+    @wiki.assign_attributes(wiki_params)
     @wiki.private = false if @wiki.private==nil # to appease validator
     
     authorize @wiki
@@ -85,5 +80,9 @@ class WikisController < ApplicationController
     flash[:alert] = t "#{policy_name}.#{exception.query}", scope: "pundit",
       default: :default
     redirect_to(request.referrer || wikis_path)
+  end
+  
+  def wiki_params
+    params.require(:wiki).permit(:title, :body, :private)
   end
 end
