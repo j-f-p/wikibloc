@@ -4,7 +4,10 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :confirmable
   
-  has_many :wikis, dependent: :destroy
+  has_many :own_wikis, dependent: :destroy, class_name: "Wiki"
+  has_many :collaborators
+  has_many :other_wikis, through: :collaborators, source: :wiki
+  
   enum role: [:standard, :premium, :admin]
   after_initialize :init
   
