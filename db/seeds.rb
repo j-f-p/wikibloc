@@ -7,8 +7,22 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 require 'faker'
 
+# clear the db without reloading schema
+User.destroy_all
+Wiki.destroy_all
+Collaborator.destroy_all
+
+# reset ids, seq = 0 results in a 1-based id sequence
+ActiveRecord::Base.connection.execute(
+  "UPDATE sqlite_sequence SET seq = 0 WHERE name = 'users';")
+ActiveRecord::Base.connection.execute(
+  "UPDATE sqlite_sequence SET seq = 0 WHERE name = 'wikis';")
+ActiveRecord::Base.connection.execute(
+  "UPDATE sqlite_sequence SET seq = 0 WHERE name = 'collaborators';")
+
 # constants
 nw = 24 # wikis
+nc = 4 # collaborations
 mps = ['fdsjkl','rewuio','vcxm,.']
 
 # members are created manually with a simple password for testing
@@ -67,23 +81,35 @@ User.create!(
   role: 'admin'
 )
 
-users = User.all
+user_ids = User.pluck(:id)
 
 # wikis are generated, some private
 nw.times do
-  wiki_user = users.sample
+  wiki_user_id = user_ids.sample
   wiki_private = false
   
-  # if authorized, with 50% probability, assign wiki as private
-  unless User.find(wiki_user.id).standard?
-    wiki_private = [false,true].sample
+  # if authorized, with 2/3 probability, assign wiki as private
+  unless User.find(wiki_user_id).standard?
+    wiki_private = [false,true,true].sample
   end
   
   Wiki.create!(
-    user: wiki_user,
     title: Faker::Lorem.sentence,
     body: Faker::Lorem.paragraph,
-    private: wiki_private
+    private: wiki_private,
+    user: User.find(wiki_user_id)
+  )
+end
+
+# collaborator assignments on some private wikis
+private_wiki_ids = Wiki.where(private: true).pluck(:id)
+ca_space = user_ids.product(private_wiki_ids).shuffle # randomizes pop below
+
+nc.times do
+  ca = ca_space.pop # so that every collaborator assignment is unique
+  Collaborator.create!(
+    user_id: ca[0],
+    wiki_id: ca[1]
   )
 end
 
@@ -94,3 +120,4 @@ puts "  #{User.where(role: :premium).count} premium"
 puts "  1 admin"
 puts "#{nw} wikis created:"
 puts "  #{Wiki.where(private: true).count} private"
+puts "#{nc} collaborator assignments created"

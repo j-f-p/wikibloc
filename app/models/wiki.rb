@@ -1,5 +1,5 @@
 class Wiki < ApplicationRecord
-  belongs_to :owner, class_name: "User", foreign_key: "user_id"
+  belongs_to :user
   has_many :collaborators
   has_many :helpers, through: :collaborators, source: :user
   
