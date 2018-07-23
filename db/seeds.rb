@@ -13,12 +13,21 @@ Wiki.destroy_all
 Collaborator.destroy_all
 
 # reset ids, seq = 0 results in a 1-based id sequence
-ActiveRecord::Base.connection.execute(
-  "UPDATE sqlite_sequence SET seq = 0 WHERE name = 'users';")
-ActiveRecord::Base.connection.execute(
-  "UPDATE sqlite_sequence SET seq = 0 WHERE name = 'wikis';")
-ActiveRecord::Base.connection.execute(
-  "UPDATE sqlite_sequence SET seq = 0 WHERE name = 'collaborators';")
+case ActiveRecord::Base.connection.adapter_name
+  when 'SQLite'
+    ActiveRecord::Base.connection.execute(
+      "UPDATE sqlite_sequence SET seq = 0 WHERE name = 'users';")
+    ActiveRecord::Base.connection.execute(
+      "UPDATE sqlite_sequence SET seq = 0 WHERE name = 'wikis';")
+    ActiveRecord::Base.connection.execute(
+      "UPDATE sqlite_sequence SET seq = 0 WHERE name = 'collaborators';")
+  when 'PostgreSQL'
+    ActiveRecord::Base.connection.reset_pk_sequence!('users')
+    ActiveRecord::Base.connection.reset_pk_sequence!('wikis')
+    ActiveRecord::Base.connection.reset_pk_sequence!('collaborators')
+else 
+    raise "Task not implemented for this DB adapter"
+end
 
 # constants
 nw = 24 # wikis
