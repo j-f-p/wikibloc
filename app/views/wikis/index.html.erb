@@ -7,7 +7,6 @@
   </div>
 </div>
 <% @wikis.each do |wiki| %>
-  <% if wiki_viewable(wiki) %>
   <div class="media">
     <div class="media-body">
       <h4 class="media-heading">
@@ -20,5 +19,4 @@
       </h4>
     </div>
   </div>
-  <% end %>
 <% end %>
