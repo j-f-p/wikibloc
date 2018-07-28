@@ -21,7 +21,10 @@ RSpec.describe WikisController, type: :controller do
       
       it "assigns [my_wiki] to @wikis" do
         get :index
-        expect(assigns(:wikis)).to eq([my_wiki])
+        my_wiki.clone
+        resolved_scope = WikiPolicy::Scope.new(my_user, Wiki.all).resolve
+        expect(resolved_scope).to eq([my_wiki])
+        # expect(assigns(resolved_scope)).to eq([my_wiki])
       end
     end
   
@@ -152,7 +155,9 @@ RSpec.describe WikisController, type: :controller do
       
       it "assigns [my_wiki] to @wikis" do
         get :index
-        expect(assigns(:wikis)).to eq([my_wiki])
+        my_wiki.clone
+        resolved_scope = WikiPolicy::Scope.new(my_user, Wiki.all).resolve
+        expect(resolved_scope).to eq([my_wiki])
       end
     end
   

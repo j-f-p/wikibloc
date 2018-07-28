@@ -1,5 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Collaborator, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:user) { create(:user) }
+  let(:wiki) { create(:wiki) }
+  let(:collaborator) { Collaborator.create!(user: user, wiki: wiki) }
+  
+  it { is_expected.to belong_to(:user) }
+  it { is_expected.to belong_to(:wiki) }
 end

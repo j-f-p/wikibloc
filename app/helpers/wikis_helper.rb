@@ -7,6 +7,11 @@ module WikisHelper
       (current_user.admin? || current_user.premium?)
   end
   
+  def authorized_to_manage_collaborators?(wiki)
+    authorized_for_private_wikis?(wiki) &&
+      wiki.user==current_user
+  end
+  
   def markdown(text)
     options = {
       filter_html: true,

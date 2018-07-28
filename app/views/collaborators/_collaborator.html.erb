@@ -1,0 +1,6 @@
+<p><b>Add Collaborator</b></p>
+<p>
+  Enter user id number for new collaborator:
+  <%= number_field :user_id, in: 1..Collaborator.count,
+    class: 'form-control', placeholder: 0 %>
+</p>

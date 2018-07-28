@@ -4,7 +4,7 @@ RSpec.describe User, type: :model do
   let(:user) { create(:user) }
   
   # shoulda tests
-  it { is_expected.to have_many(:wikis) }
+  it { is_expected.to have_many(:own_wikis) }
   
   it { is_expected.to validate_presence_of(:email) }
   it { is_expected.to validate_uniqueness_of(:email) }
