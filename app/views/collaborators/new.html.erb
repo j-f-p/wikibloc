@@ -1,0 +1,25 @@
+<h1>
+  <%= @wiki.title %> <br>
+  <small>updated <%= time_ago_in_words(@wiki.updated_at) %> ago</small><br>
+  <% if @wiki.private? %>
+    <small>Private Wiki by <%= User.find(@wiki.user_id).email %></small>
+  <% end %>
+</h1>
+
+<% wiki_collabs = Collaborator.where(wiki_id: @wiki.id)  %>
+
+<% if wiki_collabs.count>0 %>
+<p><b><%='Collaborator'.pluralize(wiki_collabs.count)%></b></p>
+<ul>
+  <% wiki_collabs.each do |collaborator| %>
+    <li><%= User.find(collaborator.user_id).email %></li>
+  <% end %>
+</ul>
+<% end %>
+
+<p><b>Add Collaborator</b></p>
+<p>
+  Enter user id number for new collaborator:
+  <%= number_field :user_id, in: 1..Collaborator.count,
+    class: 'form-control', placeholder: 0 %>
+</p>

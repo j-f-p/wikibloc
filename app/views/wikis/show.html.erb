@@ -21,7 +21,8 @@
     </div>
     <div class="row row_margin">
       <% if authorized_to_manage_collaborators?(@wiki) %>
-        <%= link_to "Add Collaborator", new_collaborator_path,
+        <%= link_to "Add Collaborator",
+          new_collaborator_path(collab_wiki_id: @wiki.id),
           class: 'btn btn-success' %>
       <% end %>
     </div>

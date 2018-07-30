@@ -24,7 +24,6 @@ RSpec.describe WikisController, type: :controller do
         my_wiki.clone
         resolved_scope = WikiPolicy::Scope.new(my_user, Wiki.all).resolve
         expect(resolved_scope).to eq([my_wiki])
-        # expect(assigns(resolved_scope)).to eq([my_wiki])
       end
     end
   
