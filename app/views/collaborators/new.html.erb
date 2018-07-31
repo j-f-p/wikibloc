@@ -6,20 +6,53 @@
   <% end %>
 </h1>
 
-<% wiki_collabs = Collaborator.where(wiki_id: @wiki.id)  %>
+<% cids=Collaborator.where(wiki_id: @wiki.id).order(user_id: :asc)
+                    .pluck(:user_id) %>
+<% uids=User.pluck(:id) %>
+<% nids=uids.reject{ |n| cids.include? n } %>
 
-<% if wiki_collabs.count>0 %>
-<p><b><%='Collaborator'.pluralize(wiki_collabs.count)%></b></p>
-<ul>
-  <% wiki_collabs.each do |collaborator| %>
-    <li><%= User.find(collaborator.user_id).email %></li>
+<% if cids.count>0 %>
+<p><b><%='Collaborator'.pluralize(cids.count)%></b></p>
+<table>
+  <tr>
+    <th class="coll-th-td">User ID</th>
+    <th class="coll-th-td">Email</th>
+  </tr>
+  <% cids.each do |cid| %>
+  <tr>
+    <td class="coll-th-td"><%= User.find(cid).id %> </td>
+    <td class="coll-th-td"><%= User.find(cid).email %> </td>
+  </tr>
   <% end %>
-</ul>
+</table>
+<br>
 <% end %>
 
+<% if nids.count>0 %>
 <p><b>Add Collaborator</b></p>
 <p>
-  Enter user id number for new collaborator:
+  Enter user id number from available users:
   <%= number_field :user_id, in: 1..Collaborator.count,
     class: 'form-control', placeholder: 0 %>
 </p>
+<div class="other-users">
+  <p><b>Available Users</b></p>
+  <table>
+    <tr>
+      <th class="coll-th-td">User ID</th>
+      <th class="coll-th-td">Email</th>
+    </tr>
+  <% User.find(nids).each do |av_user| %>
+  <tr>
+    <td class="coll-th-td"><%= av_user.id %> </td>
+    <td class="coll-th-td"><%= av_user.email %> </td>
+  </tr>
+  <% end %>
+  </table>
+</div>
+<% else %>
+<p>
+  All available users are collaborators.
+  Register a new user to add a collaborator.
+</p>
+<% end %>
