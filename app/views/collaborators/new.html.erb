@@ -2,14 +2,21 @@
   <%= @wiki.title %> <br>
   <small>updated <%= time_ago_in_words(@wiki.updated_at) %> ago</small><br>
   <% if @wiki.private? %>
-    <small>Private Wiki by <%= User.find(@wiki.user_id).email %></small>
+    <small>Private Wiki by <%= current_user.email %></small>
   <% end %>
 </h1>
 
-<% cids=Collaborator.where(wiki_id: @wiki.id).order(user_id: :asc)
-                    .pluck(:user_id) %>
-<% uids=User.pluck(:id) %>
-<% nids=uids.reject{ |n| cids.include? n } %>
+<% # Determine collaborators and non-collaborators of @wiki.
+cids=Collaborator.where(wiki_id: @wiki.id).order(user_id: :asc).pluck(:user_id) 
+uids=User.pluck(:id)
+# nids stores users that are not collaborators of @wiki.
+nids=uids.reject{ |n| cids.include? n } 
+nids.delete(current_user.id)
+# A wiki owner is an implied collaborator and does not have a collaborator
+# object. Thus, for viewing purposes, push Wiki owner id onto cids and sort.
+cids << current_user.id
+cids.sort!
+%>
 
 <% if cids.count>0 %>
 <p><b><%='Collaborator'.pluralize(cids.count)%></b></p>
@@ -18,10 +25,10 @@
     <th class="coll-th-td">User ID</th>
     <th class="coll-th-td">Email</th>
   </tr>
-  <% cids.each do |cid| %>
+  <% User.find(cids).each do |co_user| %>
   <tr>
-    <td class="coll-th-td"><%= User.find(cid).id %> </td>
-    <td class="coll-th-td"><%= User.find(cid).email %> </td>
+    <td class="coll-th-td"><%= co_user.id %> </td>
+    <td class="coll-th-td"><%= co_user.email %> </td>
   </tr>
   <% end %>
 </table>
@@ -29,12 +36,21 @@
 <% end %>
 
 <% if nids.count>0 %>
-<p><b>Add Collaborator</b></p>
-<p>
-  Enter user id number from available users:
-  <%= number_field :user_id, in: 1..Collaborator.count,
-    class: 'form-control', placeholder: 0 %>
-</p>
+<p><b>Add <%='Collaborator'.pluralize(nids.count)%></b></p>
+  <%= form_tag "/collaborators" do %>
+    <%= hidden_field_tag :new_cids_wid, params[:collab_wiki_id] %>
+    <% if nids.count>1 %>
+      <p>
+      Enter one user id number or a comma separated list of user id numbers from
+      available users:<br>
+      <%= text_field_tag :new_cids, nil, class: 'field_width form-control',
+        placeholder: '# or #, #, ...' %>
+      <%= submit_tag "add" %>
+      </p>
+    <% else %>
+      <p><%= submit_tag "Add available user" %></p>
+    <% end %>
+  <% end %>
 <div class="other-users">
   <p><b>Available Users</b></p>
   <table>
