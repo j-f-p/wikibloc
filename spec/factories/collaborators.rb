@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :collaborator do
-    user nil
     wiki nil
+    user nil
   end
 end
