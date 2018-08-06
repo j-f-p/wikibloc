@@ -37,8 +37,7 @@ cids.sort!
 
 <% if nids.count>0 %>
 <p><b>Add <%='Collaborator'.pluralize(nids.count)%></b></p>
-  <%= form_tag "/collaborators" do %>
-    <%= hidden_field_tag :new_cids_wid, params[:collab_wiki_id] %>
+  <%= form_tag [@wiki,@collaborator] do %>
     <% if nids.count>1 %>
       <p>
       Enter one user id number or a comma separated list of user id numbers from
