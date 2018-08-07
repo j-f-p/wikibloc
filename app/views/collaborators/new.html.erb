@@ -38,6 +38,28 @@ cids.sort!
 <% if nids.count>0 %>
 <p><b>Add <%='Collaborator'.pluralize(nids.count)%></b></p>
   <%= form_tag [@wiki,@collaborator] do %>
+    <% if @collaborator.errors.any? || @collaborator.user_id==current_user.id %>
+      <div class="alert alert-danger field_width">
+        <% if @collaborator.user_id==current_user.id %>
+        <h4>1 error</h4>
+        <ul>
+          <li>User ID corresponds to an existing collaborator.
+            Select ID from those available.</li>
+        </ul>
+        <% else %>
+        <h4><%=pluralize(@collaborator.errors.count, "error")%></h4>
+        <ul>
+          <% @collaborator.errors.full_messages.each do |msg| %>
+            <%if msg.include? "must exist"
+                msg = "User ID does not exist, sign up new user or " +
+                  "select ID from those available."
+              end %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+        <% end %>
+      </div>
+    <% end %>
     <% if nids.count>1 %>
       <p>
       Enter one user id number or a comma separated list of user id numbers from

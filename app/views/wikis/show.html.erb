@@ -21,10 +21,9 @@
     </div>
     <div class="row row_margin">
       <% if authorized_to_manage_collaborators?(@wiki) %>
-        <%= link_to "Add Collaborator",
-          new_wiki_collaborator_path(@wiki),
+        <%= link_to "Add Collaborator", new_wiki_collaborator_path(@wiki),
           class: 'btn btn-success' %>
-      <% end %>
+      <% end # only wiki_id passed and it is in the params list %>
     </div>
   </div>
 </div>
