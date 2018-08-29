@@ -1,9 +1,10 @@
-<h1>
+<h1 class="nav-tabs">
   <%= @wiki.title %> <br>
   <small>updated <%= time_ago_in_words(@wiki.updated_at) %> ago</small><br>
   <% if @wiki.private? %>
     <small>Private Wiki by <%= current_user.email %></small>
   <% end %>
+  <p></p>
 </h1>
 
 <% # Determine collaborators and non-collaborators of @wiki.
@@ -65,7 +66,7 @@ cids.sort!
       Enter one user id number or a comma separated list of user id numbers from
       available users:<br>
       <%= text_field_tag :new_cids, nil, class: 'field_width form-control',
-        placeholder: '# or #, # or #, #, # or . . .' %>
+        placeholder: '#   or   #, #   or  #, #, #   or   . . .' %>
       <%= submit_tag "add" %>
       </p>
     <% else %>

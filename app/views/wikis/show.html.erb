@@ -1,9 +1,10 @@
-<h1>
+<h1 class="nav-tabs">
   <%= @wiki.title %> <br>
   <small>updated <%= time_ago_in_words(@wiki.updated_at) %> ago</small><br>
   <% if @wiki.private? %>
     <small>Private Wiki by <%= User.find(@wiki.user_id).email %></small>
   <% end %>
+  <p></p>
 </h1>
 
 <div class="row">
@@ -11,6 +12,7 @@
     <p><%= markdown(@wiki.body) %></p>
   </div>
   <div class="col-md-4">
+    <p></p><!-- To match p element spacing added by markdown() in 1st column -->
     <div class="row">
       <%= link_to "Edit", edit_wiki_path(@wiki), class: 'btn btn-success' %>
       <% if policy(@wiki).destroy? %>
@@ -19,11 +21,41 @@
           data: {confirm: 'Are you sure you want to delete this wiki?'} %>
       <% end %>
     </div>
-    <div class="row row_margin">
-      <% if authorized_to_manage_collaborators?(@wiki) %>
-        <%= link_to "Add Collaborator", new_wiki_collaborator_path(@wiki),
-          class: 'btn btn-success' %>
-      <% end # only wiki_id passed and it is in the params list %>
+    
+<% if authorized_to_manage_collaborators?(@wiki) #============================%>
+<% # Determine collaborators @wiki.
+cids=Collaborator.where(wiki_id: @wiki.id).order(user_id: :asc).pluck(:user_id) 
+# A wiki owner is an implied collaborator and does not have a collaborator
+# object. Thus, for viewing purposes, push Wiki owner id onto cids and sort.
+cids << current_user.id # thus, cids >= 1
+cids.sort!
+%>
+
+<% if cids.count>1 # There are at least 2 authors, collaborator table shown. %>
+    <div class="empty_row nested_row_margin"></div>
+    <div class="row">
+      <p><b><%='Collaborator'.pluralize(cids.count)%></b></p>
+      <table>
+        <tr>
+          <th class="coll-th-td">User ID</th>
+          <th class="coll-th-td">Email</th>
+        </tr>
+        <% User.find(cids).each do |co_user| %>
+        <tr>
+          <td class="coll-th-td"><%= co_user.id %> </td>
+          <td class="coll-th-td"><%= co_user.email %> </td>
+        </tr>
+        <% end %>
+      </table>
     </div>
+<% end %>
+
+    <div class="row">
+      <%= link_to "Add Collaborator", new_wiki_collaborator_path(@wiki),
+        class: 'btn btn-success' %>
+      <% # Above, link_to passes a params hash with one key, wiki_id. %>
+    </div>
+<% end #======================================================================%>
+
   </div>
 </div>

@@ -1,6 +1,18 @@
 // Place all the styles related to the wikis controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.col-md-4 > .row {
+  margin-top: 4px; // matches space between inline-block blocks
+  margin-left: 0;  // eliminates default negative margin
+  margin-right: 0; // eliminates default negative margin
+}
+
+.empty_row {
+  margin-top: 4px; // matches space between inline-block blocks
+  height: 34px;    // matches bootstrap default button height
+}
+
 .private-checkbox {
   margin-left: 20px;
 }

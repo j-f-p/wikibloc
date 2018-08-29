@@ -48,4 +48,5 @@ RSpec.describe Collaborator, type: :model do
   #     expect(create(:collaborator, wiki: wiki, user: user)).to eq(false)
   #   end
   # end
+  # This fails, though, validation works in app test.
 end
