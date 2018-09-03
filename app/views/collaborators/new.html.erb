@@ -44,7 +44,7 @@ cids.sort!
         <% if @collaborator.user_id==current_user.id %>
         <h4>1 error</h4>
         <ul>
-          <li>User ID corresponds to an existing collaborator.
+          <li>User ID corresponds to you, the lead collaborator.
             Select ID from those available.</li>
         </ul>
         <% else %>
@@ -88,6 +88,7 @@ cids.sort!
   <% end %>
   </table>
 </div>
+<%= button_to "abort", @wiki, method: :get %>
 <% else %>
 <p>
   All available users are collaborators.

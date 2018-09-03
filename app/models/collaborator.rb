@@ -5,6 +5,8 @@ class Collaborator < ApplicationRecord
   validates_associated :wiki
   validates_associated :user
   
+  # belongs_to and validates_associated obviate the need for validates presence
+  
   validates :user, uniqueness: { scope: :wiki,
     message: "ID corresponds to an existing collaborator. " +
       "Select ID from those available." }

@@ -8,9 +8,13 @@
   margin-right: 0; // eliminates default negative margin
 }
 
-.empty_row {
+.empty-row {
   margin-top: 4px; // matches space between inline-block blocks
   height: 34px;    // matches bootstrap default button height
+}
+
+.name-list {
+  margin: 0 13px 0;
 }
 
 .private-checkbox {

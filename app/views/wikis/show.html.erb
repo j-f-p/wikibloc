@@ -32,21 +32,16 @@ cids.sort!
 %>
 
 <% if cids.count>1 # There are at least 2 authors, collaborator table shown. %>
-    <div class="empty_row nested_row_margin"></div>
+    <div class="empty-row nested_row_margin"></div>
     <div class="row">
-      <p><b><%='Collaborator'.pluralize(cids.count)%></b></p>
-      <table>
-        <tr>
-          <th class="coll-th-td">User ID</th>
-          <th class="coll-th-td">Email</th>
-        </tr>
-        <% User.find(cids).each do |co_user| %>
-        <tr>
-          <td class="coll-th-td"><%= co_user.id %> </td>
-          <td class="coll-th-td"><%= co_user.email %> </td>
-        </tr>
-        <% end %>
-      </table>
+      <p class="zero-margin">
+        <b><%='Collaborator'.pluralize(cids.count)%></b>
+      </p>
+      <% User.find(cids).each do |co_user| %>
+        <p class="name-list">
+          <%= co_user.email[0...(/@/=~co_user.email)] %>
+        </p>
+      <% end %>
     </div>
 <% end %>
 
